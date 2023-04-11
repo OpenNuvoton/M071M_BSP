@@ -157,7 +157,7 @@ int main()
 
     printf("\n\n");
     printf("+----------------------------------------+\n");
-    printf("|      M071M FMC IAP Sample Code        |\n");
+    printf("|      M071M FMC IAP Sample Code         |\n");
     printf("|           [APROM code]                 |\n");
     printf("+----------------------------------------+\n");
 
@@ -227,14 +227,14 @@ int main()
 
                 ResetFunc = (FUNC_PTR *)M32(4);
 
-#if defined(__GNUC__)
+#if (defined(__GNUC__) && !defined(__ARMCC_VERSION))
                 /* Set Main Stack Pointer register of new boot */
                 __set_MSP(M32(FMC_Read(FMC_LDROM_BASE)));
 #else
                 /* Set Main Stack Pointer register of new boot */
                 __set_MSP(M32(0));
 #endif
-    
+
                 /* Call reset handler of new boot */
                 ResetFunc();
 //                /* Software reset to boot to LDROM */
