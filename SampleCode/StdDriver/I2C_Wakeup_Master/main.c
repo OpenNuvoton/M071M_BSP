@@ -335,7 +335,7 @@ int32_t main(void)
 
     printf("Configure I2C0 as a master.\n");
     printf("The I/O connection for I2C0:\n");
-    printf("I2C0_SDA(P3.4), I2C0_SCL(P3.5)\n");
+    printf("I2C0_SDA(PA.8), I2C0_SCL(PA.9)\n");
 
     /* Init I2C0 to access Slave */
     I2C0_Init();
@@ -358,22 +358,55 @@ int32_t main(void)
     /*Access to the corresponding address Slave*/
     printf("\n");
     printf(" == No Mask Address ==\n");
-    I2C0_Read_Write_SLAVE(0x15);
-    I2C0_Read_Write_SLAVE(0x35);
-    I2C0_Read_Write_SLAVE(0x55);
-    I2C0_Read_Write_SLAVE(0x75);
+    if (0 > I2C0_Read_Write_SLAVE(0x15))
+    {
+        printf("SLAVE Address test FAIL.\n");
+        goto lexit;
+    }
+    if (0 > I2C0_Read_Write_SLAVE(0x35))
+    {
+        printf("SLAVE Address test FAIL.\n");
+        goto lexit;
+    }
+    if (0 > I2C0_Read_Write_SLAVE(0x55))
+    {
+        printf("SLAVE Address test FAIL.\n");
+        goto lexit;
+    }
+    if (0 > I2C0_Read_Write_SLAVE(0x75))
+    {
+        printf("SLAVE Address test FAIL.\n");
+        goto lexit;
+    }
     printf("SLAVE Address test OK.\n");
 
 
     /* Access Slave with address mask */
     printf("\n");
     printf(" == Mask Address ==\n");
-    I2C0_Read_Write_SLAVE(0x15 & ~0x01);
-    I2C0_Read_Write_SLAVE(0x35 & ~0x04);
-    I2C0_Read_Write_SLAVE(0x55 & ~0x01);
-    I2C0_Read_Write_SLAVE(0x75 & ~0x04);
+    if (0 > I2C0_Read_Write_SLAVE(0x15 & ~0x01))
+    {
+        printf("SLAVE Address Mask test FAIL.\n");
+        goto lexit;
+    }
+    if (0 > I2C0_Read_Write_SLAVE(0x35 & ~0x04))
+    {
+        printf("SLAVE Address Mask test FAIL.\n");
+        goto lexit;
+    }
+    if (0 > I2C0_Read_Write_SLAVE(0x55 & ~0x01))
+    {
+        printf("SLAVE Address Mask test FAIL.\n");
+        goto lexit;
+    }
+    if (0 > I2C0_Read_Write_SLAVE(0x75 & ~0x04))
+    {
+        printf("SLAVE Address Mask test FAIL.\n");
+        goto lexit;
+    }
     printf("SLAVE Address Mask test OK.\n");
 
+lexit:
     s_I2C0HandlerFn = NULL;
 
     /* Close I2C0 */

@@ -380,19 +380,54 @@ int32_t main(void)
     /*Access to the corresponding address Slave*/
     printf("\n\n");
     printf("Slave address no mask test.\n");
-    Read_Write_SLAVE(0x15);
-    Read_Write_SLAVE(0x35);
-    Read_Write_SLAVE(0x55);
-    Read_Write_SLAVE(0x75);
+    if (0 > Read_Write_SLAVE(0x15))
+    {
+        printf("SLAVE Address test FAIL.\n");
+        goto lexit;
+    }
+    if (0 > Read_Write_SLAVE(0x35))
+    {
+        printf("SLAVE Address test FAIL.\n");
+        goto lexit;
+    }
+    if (0 > Read_Write_SLAVE(0x55))
+    {
+        printf("SLAVE Address test FAIL.\n");
+        goto lexit;
+    }
+    if (0 > Read_Write_SLAVE(0x75))
+    {
+        printf("SLAVE Address test FAIL.\n");
+        goto lexit;
+    }
+    printf("SLAVE Address test OK.\n");
 
     /* Access Slave with address mask */
     printf("\n\n");
     printf("Slave address mask test.\n");
-    Read_Write_SLAVE(0x15 & ~0x01);
-    Read_Write_SLAVE(0x35 & ~0x04);
-    Read_Write_SLAVE(0x55 & ~0x01);
-    Read_Write_SLAVE(0x75 & ~0x04);
+    if (0 > Read_Write_SLAVE(0x15 & ~0x01))
+    {
+        printf("SLAVE Address Mask test FAIL.\n");
+        goto lexit;
+    }
+    if (0 > Read_Write_SLAVE(0x35 & ~0x04))
+    {
+        printf("SLAVE Address Mask test FAIL.\n");
+        goto lexit;
+    }
+    if (0 > Read_Write_SLAVE(0x55 & ~0x01))
+    {
+        printf("SLAVE Address Mask test FAIL.\n");
+        goto lexit;
+    }
+    if (0 > Read_Write_SLAVE(0x75 & ~0x04))
+    {
+        printf("SLAVE Address Mask test FAIL.\n");
+        goto lexit;
+    }
+    printf("SLAVE Address Mask test OK.\n");
 
+lexit:
     s_I2C0HandlerFn = NULL;
 
     /* Close I2C0 */
