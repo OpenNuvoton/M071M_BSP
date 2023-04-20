@@ -1,5 +1,5 @@
 /**************************************************************************//**
- * @file     Smpl_DrvFMC_SimpleLD.c
+ * @file     main_LD.c
  * @version  V2.00
  * $Revision: 2 $
  * $Date: 14/06/24 8:50p $
@@ -34,15 +34,15 @@ __root const uint32_t g_funcTable[4] =
     (uint32_t)IAP_Func0, (uint32_t)IAP_Func1, (uint32_t)IAP_Func2, (uint32_t)IAP_Func3
 } ;
 #else
-#if defined(__GNUC__)
+#if (defined(__GNUC__) && !defined(__ARMCC_VERSION))
 const uint32_t __attribute__((section (".IAPFunTable"))) g_funcTable[4] =
 {
     (uint32_t)IAP_Func0, (uint32_t)IAP_Func1, (uint32_t)IAP_Func2, (uint32_t)IAP_Func3
 };
 #else
-__attribute__((at(FUN_TBL_BASE))) const uint32_t g_funcTable[4] =
+const uint32_t * __attribute__((section(".ARM.__at_0x00100E00"))) g_funcTable[4] =
 {
-    (uint32_t)IAP_Func0, (uint32_t)IAP_Func1, (uint32_t)IAP_Func2, (uint32_t)IAP_Func3
+    (uint32_t *)IAP_Func0, (uint32_t *)IAP_Func1, (uint32_t *)IAP_Func2, (uint32_t *)IAP_Func3
 };
 #endif
 #endif
@@ -92,11 +92,11 @@ void SYS_Init(void)
     CLK->CLKSEL1 = CLK_CLKSEL1_UART_S_PLL;
 
     /* Update System Core Clock */
-    /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CycylesPerUs automatically. */
+    /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CyclesPerUs automatically. */
     //SystemCoreClockUpdate();
     PllClock        = PLL_CLOCK;            // PLL
     SystemCoreClock = PLL_CLOCK / 1;        // HCLK
-    CyclesPerUs     = PLL_CLOCK / 1000000;  // For SYS_SysTickDelay()
+    CyclesPerUs     = PLL_CLOCK / 1000000;  // For CLK_SysTickDelay()
 
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
@@ -125,7 +125,7 @@ void UART0_Init(void)
 
 int32_t IAP_Func0(int32_t n)
 {
-#if defined(__GNUC__)
+#if (defined(__GNUC__) && !defined(__ARMCC_VERSION))
     return (n * 1);
 #else
     int32_t i;
@@ -141,8 +141,8 @@ int32_t IAP_Func0(int32_t n)
 
 int32_t IAP_Func1(int32_t n)
 {
-#if defined(__GNUC__)
-    return (n * 2);
+#if (defined(__GNUC__) && !defined(__ARMCC_VERSION))
+    return (n * 1);
 #else
     int32_t i;
 
@@ -156,8 +156,8 @@ int32_t IAP_Func1(int32_t n)
 }
 int32_t IAP_Func2(int32_t n)
 {
-#if defined(__GNUC__)
-    return (n * 2);
+#if (defined(__GNUC__) && !defined(__ARMCC_VERSION))
+    return (n * 1);
 #else
     int32_t i;
 
@@ -171,8 +171,8 @@ int32_t IAP_Func2(int32_t n)
 }
 int32_t IAP_Func3(int32_t n)
 {
-#if defined(__GNUC__)
-    return (n * 2);
+#if (defined(__GNUC__) && !defined(__ARMCC_VERSION))
+    return (n * 1);
 #else
     int32_t i;
 
@@ -229,7 +229,7 @@ int32_t main(void)
     }
     printf("\n");
 
-    printf("Function table @ 0x%08x\n", g_funcTable);
+    printf("Function table @ 0x%08x\n", (uint32_t)g_funcTable);
 
     while(SYS->PDID)__WFI();
 #endif
