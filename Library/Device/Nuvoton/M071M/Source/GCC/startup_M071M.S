@@ -85,8 +85,8 @@ __Vectors:
     .long   UART5_IRQHandler 
     .long   I2C0_IRQHandler 
     .long   I2C1_IRQHandler 
-    .long   CAN0_IRQHandler 
-    .long   CAN1_IRQHandler
+    .long   Default_Handler 
+    .long   Default_Handler
     .long   PWM0_IRQHandler 
     .long   PWM1_IRQHandler  
     .long   Default_Handler  
@@ -324,8 +324,6 @@ Default_Handler:
     def_irq_handler UART5_IRQHandler
     def_irq_handler I2C0_IRQHandler
     def_irq_handler I2C1_IRQHandler
-    def_irq_handler CAN0_IRQHandler
-    def_irq_handler CAN1_IRQHandler
     def_irq_handler PWM0_IRQHandler
     def_irq_handler PWM1_IRQHandler
     def_irq_handler BRAKE0_IRQHandler

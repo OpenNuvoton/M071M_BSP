@@ -81,8 +81,8 @@ __Vectors       DCD     __initial_sp              ; Top of Stack
                 DCD     UART5_IRQHandler 
                 DCD     I2C0_IRQHandler 
                 DCD     I2C1_IRQHandler 
-                DCD     CAN0_IRQHandler 
-                DCD     CAN1_IRQHandler
+                DCD     Default_Handler 
+                DCD     Default_Handler
                 DCD     PWM0_IRQHandler
                 DCD     PWM1_IRQHandler
                 DCD     Default_Handler
@@ -188,8 +188,6 @@ Default_Handler PROC
                 EXPORT  UART5_IRQHandler          [WEAK]
                 EXPORT  I2C0_IRQHandler           [WEAK]
                 EXPORT  I2C1_IRQHandler           [WEAK]
-                EXPORT  CAN0_IRQHandler           [WEAK]
-                EXPORT  CAN1_IRQHandler           [WEAK] 
                 EXPORT  PWM0_IRQHandler           [WEAK]                               
                 EXPORT  PWM1_IRQHandler           [WEAK]
                 EXPORT  BRAKE0_IRQHandler         [WEAK]
@@ -217,8 +215,6 @@ UART4_IRQHandler
 UART5_IRQHandler
 I2C0_IRQHandler
 I2C1_IRQHandler
-CAN0_IRQHandler
-CAN1_IRQHandler
 PWM0_IRQHandler
 PWM1_IRQHandler
 BRAKE0_IRQHandler

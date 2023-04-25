@@ -61,8 +61,8 @@ __vector_table
     DCD     UART5_IRQHandler            ; UART5 interrupt                                         
     DCD     I2C0_IRQHandler             ; I2C0 interrupt                                         
     DCD     I2C1_IRQHandler             ; I2C1 interrupt                                         
-    DCD     CAN0_IRQHandler             ; CAN0 interrupt                                         
-    DCD     CAN1_IRQHandler             ; CAN1 interrupt                                         
+    DCD     Default_Handler             ; Reserved
+    DCD     Default_Handler             ; Reserved
     DCD     PWM0_IRQHandler             ; PWM0 interrupt 
     DCD     PWM1_IRQHandler             ; PWM1 interrupt                                
     DCD     Default_Handler             ; Reserved
@@ -137,8 +137,6 @@ HardFault_Handler\
     PUBWEAK UART5_IRQHandler 
     PUBWEAK I2C0_IRQHandler 
     PUBWEAK I2C1_IRQHandler 
-    PUBWEAK CAN0_IRQHandler  
-    PUBWEAK CAN1_IRQHandler  
     PUBWEAK PWM0_IRQHandler 	
     PUBWEAK PWM1_IRQHandler   
     PUBWEAK BRAKE0_IRQHandler 
@@ -171,8 +169,6 @@ UART4_IRQHandler
 UART5_IRQHandler  
 I2C0_IRQHandler  
 I2C1_IRQHandler  
-CAN0_IRQHandler 
-CAN1_IRQHandler  
 PWM0_IRQHandler 
 PWM1_IRQHandler   
 BRAKE0_IRQHandler  
