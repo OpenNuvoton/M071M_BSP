@@ -26,6 +26,7 @@ int32_t IAP_Func0(int32_t n);
 int32_t IAP_Func1(int32_t n);
 int32_t IAP_Func2(int32_t n);
 int32_t IAP_Func3(int32_t n);
+void ProcessHardFault(void);
 
 #if defined ( __ICCARM__ )
 # pragma location = "FunTblSection" /* The location of FunTblSection is defined in FMC_IAP_LD.icf file. */
@@ -47,6 +48,7 @@ const uint32_t * __attribute__((section(".ARM.__at_0x00100E00"))) g_funcTable[4]
 #endif
 #endif
 
+void ProcessHardFault(void){}
 
 void SysTickDelay(uint32_t us)
 {
