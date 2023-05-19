@@ -25,6 +25,8 @@ This BSP folder
 
 ## .\Sample Code\
 
+- Hard_Fault_Sample<br>
+	 Show hard fault information when hard fault happened.
 
 - ISP<br>
 	Sample codes for In-System-Programming.
