@@ -34,14 +34,14 @@ void UART_T_IRQHandler(void)
     uint32_t u32IntSrc = UART_T->ISR;
 
     /* RDA FIFO interrupt and RDA timeout interrupt */
-    if (u32IntSrc & (UART_ISR_RDA_IF_Msk|UART_ISR_TOUT_IF_Msk)) { 
+    if (u32IntSrc & (UART_ISR_RDA_IF_Msk|UART_ISR_TOUT_IF_Msk)) {
         /* Read data until RX FIFO is empty or data is over maximum packet size */
         while (((UART_T->FSR & UART_FSR_RX_EMPTY_Msk) == 0) && (bufhead < MAX_PKT_SIZE)) {	//RX fifo not empty
             uart_rcvbuf[bufhead++] = UART_T->RBR;
         }
     }
 
-    /* Reset data buffer index */    
+    /* Reset data buffer index */
     if (bufhead == MAX_PKT_SIZE) {
         bUartDataReady = TRUE;
         bufhead = 0;
@@ -55,13 +55,13 @@ void PutString(void)
 {
     uint32_t i;
 
-    /* UART send response to master */    
+    /* UART send response to master */
     for (i = 0; i < MAX_PKT_SIZE; i++) {
-        
+
         /* Wait for TX not full */
         while ((UART_T->FSR & UART_FSR_TX_FULL_Msk));
 
-        /* UART send data */ 
+        /* UART send data */
         UART_T->THR = response_buff[i];
     }
 }
@@ -82,6 +82,7 @@ void UART_Init()
     UART_T->BAUD = (UART_BAUD_MODE0 | UART_BAUD_MODE0_DIVIDER(__HIRC, 115200));
     /* Set time-out interrupt comparator */
     UART_T->TOR = (UART_T->TOR & ~UART_TOR_TOIC_Msk) | (0x40);
+    /* Set UART NVIC */
     NVIC_SetPriority(UART_T_IRQn, 2);
     NVIC_EnableIRQ(UART_T_IRQn);
     /* Enable tim-out counter, Rx tim-out interrupt and Rx ready interrupt */

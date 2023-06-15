@@ -13,7 +13,6 @@
 #include <stdio.h>
 #include "M071M.h"
 
-#define PLLCON_SETTING      CLK_PLLCON_50MHz_HXT
 #define PLL_CLOCK           50000000
 
 uint32_t slave_buff_addr;
@@ -51,7 +50,7 @@ void I2C0_IRQHandler(void)
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
-/*  I2C TRx Callback Function                                                                               */
+/*  I2C TRx Callback Function                                                                              */
 /*---------------------------------------------------------------------------------------------------------*/
 void I2C_SlaveTRx(uint32_t u32Status)
 {
@@ -229,11 +228,11 @@ int32_t main(void)
         and Byte Read operations, and check if the read data is equal to the programmed data.
     */
 
-    printf("+------------------------------------------------------_-+\n");
-    printf("|  M071M I2C Driver Sample Code(Slave) for access Slave |\n");
+    printf("+--------------------------------------------------------+\n");
+    printf("|  M071M I2C Driver Sample Code(Slave) for access Slave  |\n");
     printf("|                                                        |\n");
     printf("| I2C Master (I2C0) <---> I2C Slave(I2C0)                |\n");
-    printf("+-------------------------------------------------------_+\n");
+    printf("+--------------------------------------------------------+\n");
 
     printf("Configure I2C0 as a slave.\n");
     printf("The I/O connection for I2C0:\n");

@@ -49,8 +49,8 @@ void SYS_Init(void)
     CLK->CLKDIV = (CLK->CLKDIV & (~CLK_CLKDIV_HCLK_N_Msk)) | CLK_CLKDIV_HCLK(1);
 
     /* Set PLL to Power-down mode */
-    CLK->PLLCON |= CLK_PLLCON_PD_Msk;          
-    
+    CLK->PLLCON |= CLK_PLLCON_PD_Msk;
+
     /* Enable external XTAL 12MHz clock */
     CLK->PWRCON |= CLK_PWRCON_XTL12M_EN_Msk;
 
@@ -63,7 +63,7 @@ void SYS_Init(void)
     CLK->CLKSEL0 = (CLK->CLKSEL0 & (~CLK_CLKSEL0_HCLK_S_Msk)) | CLK_CLKSEL0_HCLK_S_PLL;
 
     /* Update System Core Clock */
-    /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CycylesPerUs automatically. */
+    /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CyclesPerUs automatically. */
     //SystemCoreClockUpdate();
     PllClock        = PLL_CLOCK;            // PLL
     SystemCoreClock = PLL_CLOCK / 1;        // HCLK
@@ -83,12 +83,12 @@ void SYS_Init(void)
     /* Set GPB multi-function pins for UART1 RXD(PB.4) and TXD(PB.5) */
     SYS->GPB_MFP &= ~(SYS_GPB_MFP_PB0_Msk | SYS_GPB_MFP_PB1_Msk | SYS_GPB_MFP_PB4_Msk | SYS_GPB_MFP_PB5_Msk);
     SYS->GPB_MFP |= (SYS_GPB_MFP_PB0_UART0_RXD | SYS_GPB_MFP_PB1_UART0_TXD | SYS_GPB_MFP_PB4_UART1_RXD | SYS_GPB_MFP_PB5_UART1_TXD );
-                     
+
     /* Set GPA multi-function pins for UART1 nRTS(PA.8) and nCTS(PA.9) */
-    SYS->GPA_MFP &= ~( SYS_GPA_MFP_PA8_Msk | SYS_GPA_MFP_PA9_Msk );   
-    SYS->GPA_MFP |= ( SYS_GPA_MFP_PA8_UART1_nRTS | SYS_GPA_MFP_PA9_UART1_nCTS );     
-    SYS->ALT_MFP4 &= ~( SYS_ALT_MFP4_PA8_Msk | SYS_ALT_MFP4_PA9_Msk );   
-    SYS->ALT_MFP4 |= ( SYS_ALT_MFP4_PA8_UART1_nRTS | SYS_ALT_MFP4_PA9_UART1_nCTS );  
+    SYS->GPA_MFP &= ~( SYS_GPA_MFP_PA8_Msk | SYS_GPA_MFP_PA9_Msk );
+    SYS->GPA_MFP |= ( SYS_GPA_MFP_PA8_UART1_nRTS | SYS_GPA_MFP_PA9_UART1_nCTS );
+    SYS->ALT_MFP4 &= ~( SYS_ALT_MFP4_PA8_Msk | SYS_ALT_MFP4_PA9_Msk );
+    SYS->ALT_MFP4 |= ( SYS_ALT_MFP4_PA8_UART1_nRTS | SYS_ALT_MFP4_PA9_UART1_nCTS );
 
 }
 
@@ -177,7 +177,7 @@ void UART1_IRQHandler(void)
 /*---------------------------------------------------------------------------------------------------------*/
 void AutoFlow_FunctionRxTest()
 {
-    uint32_t u32i;
+    uint32_t u32i, u32Err = 0;
 
     printf("\n");
     printf("+-----------------------------------------------------------+\n");
@@ -198,7 +198,7 @@ void AutoFlow_FunctionRxTest()
     printf("|  Description :                                            |\n");
     printf("|    The sample code needs two boards. One is Master and    |\n");
     printf("|    the other is slave. Master will send 1k bytes data     |\n");
-    printf("|    to slave.Slave will check if received data is correct  |\n");
+    printf("|    to slave. Slave will check if received data is correct |\n");
     printf("|    after getting 1k bytes data.                           |\n");
     printf("|    Press any key to start...                              |\n");
     printf("+-----------------------------------------------------------+\n");
@@ -236,11 +236,15 @@ void AutoFlow_FunctionRxTest()
     {
         if(g_u8RecData[u32i] != (u32i & 0xFF))
         {
-            printf("Compare Data Failed\n");
-            while(1);
+            u32Err = 1;
+            break;
         }
     }
-    printf("\n Receive OK & Check OK\n");
+
+    if( u32Err )
+        printf("Compare Data Failed\n");
+    else
+        printf("\n Receive OK & Check OK\n");
 
     /* Disable UART1 IRQ */
     NVIC_DisableIRQ(UART1_IRQn);

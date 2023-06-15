@@ -20,6 +20,7 @@
 extern uint32_t Image$$RO$$Base;
 #endif
 
+int32_t g_FMC_i32ErrCode;
 
 void SYS_Init(void)
 {
@@ -93,6 +94,7 @@ int32_t main(void)
     uint8_t ch;
     uint32_t u32Data;
     uint32_t u32Cfg;
+    uint32_t u32TimeOutCnt;
 
     /* Unlock protected registers for ISP function */
     SYS_UnlockReg();
@@ -247,7 +249,16 @@ int32_t main(void)
     FMC->ISPADR = u32BootAddr;       /* The address of specified page which will be map to address 0x0*/
     FMC->ISPTRG = 0x1;               /* Trigger to start ISP procedure */
     __ISB();                         /* To make sure ISP/CPU be Synchronized */
-    while(FMC->ISPTRG);
+
+    u32TimeOutCnt = FMC_TIMEOUT_WRITE;
+    while(FMC->ISPTRG)
+    {
+        if(--u32TimeOutCnt == 0)
+        {
+            printf("Wait for FMC ISP operation finish time-out!\n");
+            goto lexit;
+        }
+    }
 
     /* Reset CPU only to reset to new vector page */
     SYS->IPRSTC1 |= SYS_IPRSTC1_CPU_RST_Msk;

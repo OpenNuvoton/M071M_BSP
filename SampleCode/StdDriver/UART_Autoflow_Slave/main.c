@@ -72,12 +72,12 @@ void SYS_Init(void)
     /* Set GPB multi-function pins for UART1 RXD(PB.4) and TXD(PB.5) */
     SYS->GPB_MFP &= ~(SYS_GPB_MFP_PB0_Msk | SYS_GPB_MFP_PB1_Msk | SYS_GPB_MFP_PB4_Msk | SYS_GPB_MFP_PB5_Msk);
     SYS->GPB_MFP |= (SYS_GPB_MFP_PB0_UART0_RXD | SYS_GPB_MFP_PB1_UART0_TXD | SYS_GPB_MFP_PB4_UART1_RXD | SYS_GPB_MFP_PB5_UART1_TXD );
-                     
+
     /* Set GPA multi-function pins for UART1 nRTS(PA.8) and nCTS(PA.9) */
-    SYS->GPA_MFP &= ~( SYS_GPA_MFP_PA8_Msk | SYS_GPA_MFP_PA9_Msk );   
-    SYS->GPA_MFP |= ( SYS_GPA_MFP_PA8_UART1_nRTS | SYS_GPA_MFP_PA9_UART1_nCTS );     
-    SYS->ALT_MFP4 &= ~( SYS_ALT_MFP4_PA8_Msk | SYS_ALT_MFP4_PA9_Msk );   
-    SYS->ALT_MFP4 |= ( SYS_ALT_MFP4_PA8_UART1_nRTS | SYS_ALT_MFP4_PA9_UART1_nCTS );  
+    SYS->GPA_MFP &= ~( SYS_GPA_MFP_PA8_Msk | SYS_GPA_MFP_PA9_Msk );
+    SYS->GPA_MFP |= ( SYS_GPA_MFP_PA8_UART1_nRTS | SYS_GPA_MFP_PA9_UART1_nCTS );
+    SYS->ALT_MFP4 &= ~( SYS_ALT_MFP4_PA8_Msk | SYS_ALT_MFP4_PA9_Msk );
+    SYS->ALT_MFP4 |= ( SYS_ALT_MFP4_PA8_UART1_nRTS | SYS_ALT_MFP4_PA9_UART1_nCTS );
 
 }
 
@@ -149,7 +149,7 @@ void UART1_IRQHandler(void)
 {
     volatile uint32_t u32IntSts = UART1->ISR;;
 
-    /* Rx Ready or Time-out INT*/
+    /* Rx Ready or Time-out INT */
     if(UART_GET_INT_FLAG(UART1, UART_ISR_RDA_INT_Msk) || UART_GET_INT_FLAG(UART1, UART_ISR_TOUT_INT_Msk))
     {
         /* Handle received data */
@@ -162,7 +162,7 @@ void UART1_IRQHandler(void)
 /*---------------------------------------------------------------------------------------------------------*/
 void AutoFlow_FunctionRxTest()
 {
-    uint32_t u32i;
+    uint32_t u32i, u32Err = 0;
 
     printf("\n");
     printf("+-----------------------------------------------------------+\n");
@@ -183,7 +183,7 @@ void AutoFlow_FunctionRxTest()
     printf("|  Description :                                            |\n");
     printf("|    The sample code needs two boards. One is Master and    |\n");
     printf("|    the other is slave. Master will send 1k bytes data     |\n");
-    printf("|    to slave.Slave will check if received data is correct  |\n");
+    printf("|    to slave. Slave will check if received data is correct |\n");
     printf("|    after getting 1k bytes data.                           |\n");
     printf("|    Press any key to start...                              |\n");
     printf("+-----------------------------------------------------------+\n");
@@ -201,9 +201,9 @@ void AutoFlow_FunctionRxTest()
     /* Set Timeout time 0x3E bit-time and time-out counter enable */
     UART_SetTimeoutCnt(UART1, 0x3E);
 
-    /* Enable RDA\RLS\RTO Interrupt  */
+    /* Enable RDA\RLS\RTO Interrupt */
     UART_EnableInt(UART1, (UART_IER_RDA_IEN_Msk | UART_IER_RLS_IEN_Msk | UART_IER_TOUT_IEN_Msk));
-    NVIC_EnableIRQ(UART1_IRQn);      
+    NVIC_EnableIRQ(UART1_IRQn);
 
     printf("\n Starting to receive data...\n");
 
@@ -215,15 +215,19 @@ void AutoFlow_FunctionRxTest()
     {
         if(g_u8RecData[u32i] != (u32i & 0xFF))
         {
-            printf("Compare Data Failed\n");
-            while(1);
+            u32Err = 1;
+            break;
         }
     }
-    printf("\n Receive OK & Check OK\n");
+
+    if( u32Err )
+        printf("Compare Data Failed\n");
+    else
+        printf("\n Receive OK & Check OK\n");
 
     /* Disable RDA\RLS\RTO Interrupt */
     UART_DisableInt(UART1, (UART_IER_RDA_IEN_Msk | UART_IER_RLS_IEN_Msk | UART_IER_TOUT_IEN_Msk));
-    NVIC_DisableIRQ(UART1_IRQn);      
+    NVIC_DisableIRQ(UART1_IRQn);
 
 }
 
