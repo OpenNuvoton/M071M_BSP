@@ -30,13 +30,13 @@
   *
   * <b>Copyright Notice</b>
   *
-  * Copyright (C) 2021~2023 Nuvoton Technology Corp. All rights reserved.
+  * Copyright (C) 2021~2024 Nuvoton Technology Corp. All rights reserved.
   */
 
 
 
-#ifndef __NUC1311_H__
-#define __NUC1311_H__
+#ifndef __M071M_H__
+#define __M071M_H__
 
 
 #ifdef __cplusplus
@@ -8326,4 +8326,4 @@ typedef volatile unsigned long  vu32;       ///< Define 32-bit unsigned volatile
 }
 #endif
 
-#endif // End of __NUC1311_H__
+#endif // End of __M071M_H___

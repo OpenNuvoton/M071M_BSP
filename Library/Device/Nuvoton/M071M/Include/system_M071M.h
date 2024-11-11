@@ -11,8 +11,8 @@
  * Copyright (C) 2019 Nuvoton Technology Corp. All rights reserved.
  *
  ******************************************************************************/
-#ifndef __SYSTEM_NUC1311_H
-#define __SYSTEM_NUC1311_H
+#ifndef __SYSTEM_M071M_H
+#define __SYSTEM_M071M_H
 
 #ifdef __cplusplus
 extern "C" {
